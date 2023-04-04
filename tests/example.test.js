@@ -53,7 +53,30 @@ describe('My First Puppeteer test', () =>{
          // Overide standard timeOut
          await page.setDefaultTimeout(5000)
          await page.setDefaultNavigationTimeout(10000)
+         // Keyboard press simulation
+
         await browser.close()
         
     })
 })
+describe('My second Puppeteer test', () =>{
+    it('Should launch the browser', async function(){
+        const browser = await puppeteer.launch({headless: false, slowMo:10, devtools: false})
+        const page = await browser.newPage()
+        await page.goto('http://zero.webappsecurity.com/index.html')
+        // Simulate keyboard keys press
+        await page.waitForSelector('#searchTerm')/*A good practice*/
+        await page.type('#searchTerm', 'Hello World')
+        await page.keyboard.press('Enter', { delay: 50})
+        await page.waitForTimeout(5000)
+        // wait for Xpath (can replace wait for selector)
+        // await page.waitForXPath('//h1')
+        // Case when button Does not Exist
+        await page.waitForSelector('#signin_button')
+        await page.click('#signin_button')
+        await page.waitForTimeout(() => !document.querySelector('#signin_button'))
+        await page.waitForSelector('#signin_button', {hidden: true, timeout: 3000})
+        await page.waitForTimeout(3000)
+        await browser.close()
+    })
+    })
